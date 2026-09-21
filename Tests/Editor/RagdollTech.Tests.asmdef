@@ -1,0 +1,1 @@
+{ "name": "RagdollTech.Tests", "references": ["RagdollTech.Runtime"], "includePlatforms": ["Editor"], "optionalUnityReferences": ["TestAssemblies"], "defineConstraints": ["UNITY_INCLUDE_TESTS"], "autoReferenced": false }

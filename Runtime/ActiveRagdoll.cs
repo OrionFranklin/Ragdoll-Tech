@@ -202,14 +202,15 @@ namespace RagdollTech
         public void Cancel()
         {
             RestoreAnimation();
-            foreach(var link in links){link.collider.enabled=false;link.body.isKinematic=true;}
+            // Scene teardown can destroy the separate proxy hierarchy before this component.
+            foreach(var link in links){if(link.collider)link.collider.enabled=false;if(link.body)link.body.isKinematic=true;}
             ChangeState(RagdollState.Animated);CaptureTargets();SyncKinematic();
         }
         void CaptureTargets()
         {
             if(animationPose==null)return;
             for(int i=0;i<animationPose.Length;i++){var bone=animationPose[i].bone;if(!bone)continue;animationPose[i].position=bone.localPosition;animationPose[i].rotation=bone.localRotation;}
-            foreach(var link in links){link.targetPosition=link.definition.bone.position;link.targetRotation=link.definition.bone.rotation;}
+            foreach(var link in links)if(link.definition.bone){link.targetPosition=link.definition.bone.position;link.targetRotation=link.definition.bone.rotation;}
         }
         void RestoreAnimation()
         {
@@ -218,7 +219,7 @@ namespace RagdollTech
             poseOverridden=false;
         }
         void SyncKinematic()
-        {foreach(var link in links){link.body.position=link.targetPosition;link.body.rotation=link.targetRotation;}}
+        {foreach(var link in links)if(link.body){link.body.position=link.targetPosition;link.body.rotation=link.targetRotation;}}
         void LateUpdate()
         {
             if(links.Count==0)return;
@@ -233,7 +234,7 @@ namespace RagdollTech
             foreach(var link in links)link.definition.bone.SetPositionAndRotation(link.body.position,link.body.rotation);
             poseOverridden=true;
         }
-        void OnDisable(){if(links.Count>0)Cancel();}
+        void OnDisable(){if(Active)Cancel();}
         void OnDestroy()
         {
             if(Application.isPlaying){if(physicsRoot)Destroy(physicsRoot);if(material)Destroy(material);}

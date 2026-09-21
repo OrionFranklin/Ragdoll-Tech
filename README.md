@@ -89,7 +89,7 @@ Add `"com.orion.ragdoll-tech"` to the consuming project's `testables` array in `
   -testPlatform EditMode -testResults "$Project/results.xml" -logFile "$Project/tests.log"
 ```
 
-The 12 tests cover mass/idle collision, joint-space rotation, impact modes, invalid input/gravity, blocked recovery and real physics collision/settling in all six axis directions. They restore the previous simulation mode afterward. The standalone lab also exercises frame-by-frame recovery.
+The 13 tests cover mass/idle collision, joint-space rotation, impact modes, invalid input/gravity, teardown ordering, blocked recovery and real physics collision/settling in all six axis directions. They restore the previous simulation mode afterward. The standalone lab also exercises frame-by-frame recovery.
 
 Configurable joint drives, conservative depenetration, per-body solver iterations and limited angular motion follow Unity's [ragdoll stability guidance](https://docs.unity3d.com/6000.0/Documentation/Manual/RagdollStability.html) and [joint target rotation reference](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/ConfigurableJoint-targetRotation.html). The supplied VFX breakdown inspired the separation of constraints, muscle strength and reaction states. This is original code, not Rockstar/Euphoria technology.
 

@@ -36,6 +36,12 @@ namespace RagdollTech.Tests
         }
         [Test] public void InvalidImpulsesDoNotPoisonPhysics()
         {Rig(Vector3.up);puppet.ApplyImpact(Vector3.zero,new Vector3(float.NaN,0,0));Assert.That(puppet.Active,Is.False);}
+        [Test] public void CancelToleratesProxyHierarchyDestroyedFirst()
+        {
+            Rig(Vector3.up);puppet.ApplyImpact(puppet.PelvisPosition,Vector3.forward*100);
+            UnityEngine.Object.DestroyImmediate(puppet.Bodies[0].transform.parent.gameObject);
+            Assert.DoesNotThrow(()=>puppet.Cancel());Assert.That(puppet.Active,Is.False);
+        }
         [Test] public void BadGravityCancelsAndReportsFault()
         {Rig(Vector3.up);bool fault=false;puppet.SimulationFault+=_=>fault=true;puppet.Gravity=_=>new Vector3(float.NaN,0,0);puppet.ApplyImpact(puppet.PelvisPosition,Vector3.right*100);puppet.SimulateStep(.02f);Assert.That(fault);Assert.That(puppet.Active,Is.False);}
         [Test] public void RecoveryRejectsBlockedStandingVolume()
